@@ -1,0 +1,38 @@
+from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit
+from random import randrange
+
+
+qreg =  QuantumRegister(7)
+
+creg = ClassicalRegister(7)
+
+qcircuit = QuantumCircuit(qreg,creg)
+
+picked_qubits = []
+
+
+for i in range(7):
+    r=randrange(0,2)
+    if r == 0:
+        print("heads")
+        qcircuit.x(qreg[i])
+        picked_qubits.append(i)
+   
+
+
+qcircuit.measure(qreg,creg)  
+
+from qiskit import execute, Aer
+
+
+qcircuit.draw(output='mpl',reverse_bits=True)
+
+job = execute(qcircuit,Aer.get_backend('qasm_simulator'),shots=128)
+
+counts = job.result().get_counts(qcircuit)
+        
+print(counts)
+
+
+
+
